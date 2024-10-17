@@ -18,7 +18,8 @@ if [ "$TOKEN" != "null" ]; then
     "${IMAGE}" \
     "${INSTANCE_CONNECTION_NAME}" \
     --address 0.0.0.0 \
-    --token "${TOKEN}"
+    --token "${TOKEN}" \
+    --auth-iam-authn
 elif [ -e ${DIR}/key.json ]; then
   echo "::notice ::Starting proxy using credentials file"
   docker run \
@@ -30,7 +31,8 @@ elif [ -e ${DIR}/key.json ]; then
     "${IMAGE}" \
     "${INSTANCE_CONNECTION_NAME}" \
     --address 0.0.0.0 \
-    --credentials-file "${DIR}/key.json"
+    --credentials-file "${DIR}/key.json" \
+    --auto-iam-authn
 elif [ "$IMPLICIT_CREDENTIALS" != "null" ]; then
   echo "::notice ::Starting proxy using GOOGLE_APPLICATION_CREDENTIALS"
   # make sure the container user will be permitted to use the JSON key file
@@ -44,7 +46,8 @@ elif [ "$IMPLICIT_CREDENTIALS" != "null" ]; then
     "${IMAGE}" \
     "${INSTANCE_CONNECTION_NAME}" \
     --address 0.0.0.0 \
-    --credentials-file "${IMPLICIT_CREDENTIALS}"
+    --credentials-file "${IMPLICIT_CREDENTIALS}" \
+    --auto-iam-authn
 else
   echo "::error ::Couldn't find valid credentials!"
   exit 1
